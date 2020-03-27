@@ -16,4 +16,4 @@ npm run build
 echo Deploying..
 git add -A
 git commit -m 'deploy'
-git push -f https://github.com/gabriant/asterisk.git master
+git push -f https://github.com/gabriant/astarisk.git master
