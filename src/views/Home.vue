@@ -1,14 +1,14 @@
 <template>
   <div class="home">
 
-    <div class="m-5">
+    <div class="m-3">
       <h1 class="text-center">Transforma sua frase em asteriscos!!</h1>
-      <h3 class="text-center">(Ou o que você quiser ;P)</h3>
+      <h3 class="text-center">(Ou no que você quiser ;P)</h3>
     </div>
 
-    <p class="mt-5 mb-0">
+    <p class="mt-2 mb-0">
       <label>Insira sua frase:</label>
-      <b-form-textarea v-model="text"></b-form-textarea>
+      <b-form-textarea v-model="text" maxlength="267" wrap="hard"></b-form-textarea>
       <small class="form-text text-muted text-right">
         {{ text.length || 0 }}/267
       </small>
@@ -16,19 +16,31 @@
 
     <p class="">
       <label>Trocar por:</label>
-      <b-form-input v-model="replace"></b-form-input>
+      <b-form-input v-model="replace" maxlength="50"></b-form-input>
+      <small class="form-text text-muted text-right">
+        {{ replace.length || 0 }}/50
+      </small>
       <b-form-checkbox
         id="checkbox-1"
         v-model="toggle"
       >Apenas Minúsculas</b-form-checkbox>
     </p>
 
-    <p class="mt-2">
+    <p v-if="text" class="mt-1">
       <label>Resultado:</label>
-      <b-card class="has-shadow-1">
-        <h2>{{ getAsterisk }}</h2>
+      <b-card class="result-card has-shadow-1">
+        <h2>{{ getAsteriscos }}</h2>
       </b-card>
-      <b-button variant="primary" class="mt-3">
+
+      <b-button
+        variant="primary"
+        class="mr-2 mt-3"
+        target="_blank"
+        :href="getTweet()"
+      >
+        <font-awesome-icon :icon="['fab', 'twitter']" /> Tweetar
+      </b-button>
+      <b-button variant="secondary" class="mt-3" v-clipboard:copy="getAsteriscos">
         <b-icon icon="clipboard" font-scale="1"></b-icon> Copiar
       </b-button>
     </p>
@@ -45,19 +57,28 @@ export default {
     return {
       text: '',
       toggle: false,
-      replace: '*'
+      replace: '*',
+      hashtag: 'asterisk*',
+      acentosMinus: 'àèìòùáéíóúýâêîôûãñõäëïöüÿåæœçð',
+      acentosMaius: 'ÀÈÌÒÙÁÉÍÓÚÝÂÊÎÔÛÃÑÕÄËÏÖÜŸÅÆŒÇÐ'
     }
   },
 
   computed: {
-    getAsterisk () {
-      let result
+    getAsteriscos () {
+      let regex
       if (this.toggle) {
-        result = this.text.replace(/([a-z])/g, this.replace)
+        regex = new RegExp(`[${this.acentosMinus}]|[a-z]`, 'g')
       } else {
-        result = this.text.replace(/([A-Z]|[a-z])/g, this.replace)
+        regex = new RegExp(`[${this.acentosMinus + this.acentosMaius}]|[A-Z]|[a-z]`, 'g')
       }
-      return result
+      return this.text.replace(regex, this.replace)
+    }
+  },
+
+  methods: {
+    getTweet () {
+      return `https://twitter.com/intent/tweet?button_hashtag=${this.hashtag}&ref_src=twsrc%5Etfw&text=${this.getAsteriscos}%0A`
     }
   }
 }
