@@ -58,7 +58,7 @@ export default {
       text: '',
       toggle: false,
       replace: '*',
-      hashtag: 'asterisk*',
+      hashtag: 'astarisk*',
       acentosMinus: 'àèìòùáéíóúýâêîôûãñõäëïöüÿåæœçð',
       acentosMaius: 'ÀÈÌÒÙÁÉÍÓÚÝÂÊÎÔÛÃÑÕÄËÏÖÜŸÅÆŒÇÐ'
     }
